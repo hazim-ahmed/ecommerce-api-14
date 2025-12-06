@@ -1,10 +1,17 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
+/**
+ * Create a new user
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const createUser = async (req, res) => {
+    // Check if request body is empty
     if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).json({ message: "Request body is empty or missing" });
     }
+
     try {
         const {
             user_name,
@@ -16,23 +23,29 @@ const createUser = async (req, res) => {
             fcm_token
         } = req.body;
 
-        // Basic validation
+        // Basic validation for required fields
         if (!user_name || !phone || !password || !user_type) {
             return res.status(400).json({ message: "Missing required fields: user_name, phone, password, user_type" });
         }
 
-        // Check duplicates
+        // Check for duplicate phone number
         const existingPhone = await User.findOne({ where: { phone } });
-        if (existingPhone) return res.status(400).json({ message: "Phone number already exists" });
-
-        if (email) {
-            const existingEmail = await User.findOne({ where: { email } });
-            if (existingEmail) return res.status(400).json({ message: "Email already exists" });
+        if (existingPhone) {
+            return res.status(400).json({ message: "Phone number already exists" });
         }
 
-        // Hash password
+        // Check for duplicate email if provided
+        if (email) {
+            const existingEmail = await User.findOne({ where: { email } });
+            if (existingEmail) {
+                return res.status(400).json({ message: "Email already exists" });
+            }
+        }
+
+        // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Create the new user
         const newUser = await User.create({
             user_name,
             phone,
@@ -41,63 +54,124 @@ const createUser = async (req, res) => {
             user_type,
             user_avatar,
             fcm_token,
-            user_status: 'pending',
+            user_status: 'pending', // Default status
         });
 
-        res.status(201).json({ message: "User created successfully", user: newUser });
+        return res.status(201).json({
+            message: "User created successfully",
+            user: newUser
+        });
+
     } catch (error) {
         console.error("Create User Error:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
     }
 };
 
+/**
+ * Get all users
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const getUsers = async (req, res) => {
     try {
         const users = await User.findAll();
-        res.status(200).json(users);
+        return res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Get Users Error:", error);
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
     }
 };
 
+/**
+ * Get a user by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findByPk(id);
-        if (!user) return res.status(404).json({ message: "User not found" });
-        res.status(200).json(user);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Get User By ID Error:", error);
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
     }
 };
 
+/**
+ * Update a user by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await User.findByPk(id);
-        if (!user) return res.status(404).json({ message: "User not found" });
+        console.log(`[updateUser] Updating user with ID: ${id}`);
+        console.log(`[updateUser] Request Body:`, req.body);
 
-        // If password is being updated, hash it
-        if (req.body.password) {
-            req.body.password = await bcrypt.hash(req.body.password, 10);
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            console.log(`[updateUser] User not found`);
+            return res.status(404).json({ message: "User not found" });
         }
 
-        const updatedUser = await user.update(req.body);
-        res.status(200).json(updatedUser);
+        const updates = { ...req.body };
+
+        // If password is being updated, hash it first
+        if (updates.password) {
+            updates.password = await bcrypt.hash(updates.password, 10);
+        }
+
+        const updatedUser = await user.update(updates);
+        console.log(`[updateUser] User updated successfully`);
+        return res.status(200).json(updatedUser);
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Update User Error:", error);
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
     }
 };
 
+/**
+ * Delete a user by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findByPk(id);
-        if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         await user.destroy();
-        res.status(200).json({ message: "User deleted successfully" });
+        return res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Delete User Error:", error);
+        return res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
     }
 };
 

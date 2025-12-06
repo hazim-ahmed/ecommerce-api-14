@@ -10,4 +10,9 @@ DB_USER=root
 DB_PASSWORD=
 DB_HOST=127.0.0.1
 
+//hazem edit ecommerce-api-3
+    تم انشاء الكنترولر و الراوت بشكل كامل 
+    يجب عمل فحص قبل العمل النهائي
+    
+
 

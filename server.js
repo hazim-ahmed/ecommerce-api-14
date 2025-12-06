@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 // --- Middlewares ---
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ type: ['application/json', 'text/plain'] }));
 app.use(express.urlencoded({ extended: true }));
 
 
@@ -28,6 +28,25 @@ const { sequelize, testConnection } = require('./config/db');
 
 // import routes
 app.use('/api', require('./routes/UserRoute'));
+app.use('/api', require('./routes/ProductRoute'));
+app.use('/api', require('./routes/OrderRoute'));
+app.use('/api', require('./routes/OrderItemRoute'))
+app.use('/api', require('./routes/ReviewRoute'));
+app.use('/api', require('./routes/BannerRoute'));
+app.use('/api', require('./routes/CityRoute'))
+app.use('/api', require('./routes/CouponRoute'))
+app.use('/api', require('./routes/NotificationRoute'))
+app.use('/api', require('./routes/OrderStatusHistoryRoute'))
+app.use('/api', require('./routes/ProductCategoryRoute'))
+app.use('/api', require('./routes/ProductOptionRoute'))
+app.use('/api', require('./routes/StoreRoute'))
+app.use('/api', require('./routes/StoreCategoryRoute'))
+app.use('/api', require('./routes/TransactionRoute'))
+
+
+
+
+
 
 
 
