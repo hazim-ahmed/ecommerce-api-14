@@ -6,12 +6,31 @@ const fs = require('fs');
 const path = require('path');
 const winston = require('winston');
 
-// --- استدعاء الاتصال بالقاعدة ---
-const { sequelize, testConnection } = require('./config/db');
 
 const app = express();
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
+
+
+// --- Middlewares ---
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+// --- استدعاء الاتصال بالقاعدة ---
+const { sequelize, testConnection } = require('./config/db');
+
+
+
+
+
+// import routes
+app.use('/api', require('./routes/UserRoute'));
+
+
+
 
 // --- Winston Logger ---
 const logDir = 'logs';
@@ -31,9 +50,6 @@ const logger = winston.createLogger({
 });
 global.logger = logger;
 
-// --- Middlewares ---
-app.use(cors());
-app.use(express.json());
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
