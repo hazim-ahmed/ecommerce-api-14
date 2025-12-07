@@ -1,0 +1,507 @@
+Test Run at 2025-12-07T21:48:30.992Z
+Root Directory used for testing: D:\pro\working\ecommerce-api
+
+
+---------------------------------------------------
+Testing Controller: UserController
+Arabic Name: التحكم بالمستخدمين (Users)
+Endpoint: /users
+Sending Data: {
+  "user_name": "AutoTest User",
+  "phone": "966552886584",
+  "email": "autotest1765144110994@example.com",
+  "password": "password123",
+  "user_type": "customer",
+  "user_avatar": "avatar.png",
+  "fcm_token": "token123"
+}
+Success! Response: {
+  "message": "User created successfully",
+  "user": {
+    "user_id": 9,
+    "user_name": "AutoTest User",
+    "phone": "966552886584",
+    "email": "autotest1765144110994@example.com",
+    "password": "$2b$10$Ugs6gkoZ6XgEoK/S9rZEN.b9rO0N5cSqQ91hIF0urlq.ncRaD.i6W",
+    "user_type": "customer",
+    "user_avatar": "avatar.png",
+    "fcm_token": "token123",
+    "user_status": "pending",
+    "updated_at": "2025-12-07T21:48:31.261Z",
+    "created_at": "2025-12-07T21:48:31.261Z"
+  }
+}
+Captured ID [user_id]: 9
+
+---------------------------------------------------
+Testing Controller: CityController
+Arabic Name: التحكم بالمدن (Cities)
+Endpoint: /cities
+Sending Data: {
+  "city_name": "Test City 1765144111317",
+  "city_name_en": "Test City En",
+  "price_per_km": 1.5,
+  "delivery_available": true,
+  "base_delivery_fee": 10
+}
+Success! Response: {
+  "message": "City created successfully",
+  "city": {
+    "city_status": true,
+    "city_id": 5,
+    "city_name": "Test City 1765144111317",
+    "city_name_en": "Test City En",
+    "price_per_km": 1.5,
+    "delivery_available": true,
+    "base_delivery_fee": 10,
+    "updated_at": "2025-12-07T21:48:31.336Z",
+    "created_at": "2025-12-07T21:48:31.336Z"
+  }
+}
+Captured ID [city_id]: 5
+
+---------------------------------------------------
+Testing Controller: AddressController
+Arabic Name: التحكم بالعناوين (Addresses)
+Endpoint: /addresses
+Sending Data: {
+  "user_id": 9,
+  "city_id": 5,
+  "address_title": "Home",
+  "address_line": "123 Main St",
+  "building_number": "12",
+  "floor_number": "2",
+  "apartment_number": "4",
+  "address_lat": 24.774265,
+  "address_lng": 46.738586
+}
+Success! Response: {
+  "message": "Address created successfully",
+  "address": {
+    "is_default": false,
+    "address_id": 4,
+    "user_id": 9,
+    "city_id": 5,
+    "address_title": "Home",
+    "address_line": "123 Main St",
+    "building_number": "12",
+    "floor_number": "2",
+    "apartment_number": "4",
+    "address_lat": 24.774265,
+    "address_lng": 46.738586,
+    "updated_at": "2025-12-07T21:48:31.365Z",
+    "created_at": "2025-12-07T21:48:31.365Z"
+  }
+}
+Captured ID [address_id]: 4
+
+---------------------------------------------------
+Testing Controller: StoreCategoryController
+Arabic Name: التحكم بتصنيفات المتاجر (Store Categories)
+Endpoint: /store-categories
+Sending Data: {
+  "category_name": "Test Category 1765144111379",
+  "category_name_en": "Test Cat En",
+  "category_image": "cat.png"
+}
+Success! Response: {
+  "message": "StoreCategory created successfully",
+  "storeCategory": {
+    "category_status": true,
+    "sort_order": 0,
+    "store_category_id": 5,
+    "category_name": "Test Category 1765144111379",
+    "category_name_en": "Test Cat En",
+    "category_image": "cat.png",
+    "updated_at": "2025-12-07T21:48:31.388Z",
+    "created_at": "2025-12-07T21:48:31.388Z"
+  }
+}
+Captured ID [store_category_id]: 5
+
+---------------------------------------------------
+Testing Controller: StoreController
+Arabic Name: التحكم بالمتاجر (Stores)
+Endpoint: /stores
+Sending Data: {
+  "vendor_id": 9,
+  "city_id": 5,
+  "store_category_id": 5,
+  "store_name": "Test Store 1765144111396",
+  "store_description": "Best store ever",
+  "store_lat": 24.774265,
+  "store_lng": 46.738586,
+  "store_status": "approved",
+  "is_open": true
+}
+Success! Response: {
+  "message": "Store created successfully",
+  "store": {
+    "store_rating": 0,
+    "rating_count": 0,
+    "min_order": 0,
+    "store_id": 5,
+    "vendor_id": 9,
+    "city_id": 5,
+    "store_category_id": 5,
+    "store_name": "Test Store 1765144111396",
+    "store_description": "Best store ever",
+    "store_lat": 24.774265,
+    "store_lng": 46.738586,
+    "store_status": "approved",
+    "is_open": true,
+    "updated_at": "2025-12-07T21:48:31.403Z",
+    "created_at": "2025-12-07T21:48:31.403Z"
+  }
+}
+Captured ID [store_id]: 5
+
+---------------------------------------------------
+Testing Controller: ProductCategoryController
+Arabic Name: التحكم بتصنيفات المنتجات (Product Categories)
+Endpoint: /product-categories
+Sending Data: {
+  "store_id": 5,
+  "category_name": "Drinks",
+  "category_description": "Cold drinks"
+}
+Success! Response: {
+  "message": "ProductCategory created successfully",
+  "productCategory": {
+    "category_status": true,
+    "sort_order": 0,
+    "product_category_id": 5,
+    "store_id": 5,
+    "category_name": "Drinks",
+    "category_description": "Cold drinks",
+    "updated_at": "2025-12-07T21:48:31.417Z",
+    "created_at": "2025-12-07T21:48:31.417Z"
+  }
+}
+Captured ID [product_category_id]: 5
+
+---------------------------------------------------
+Testing Controller: ProductController
+Arabic Name: التحكم بالمنتجات (Products)
+Endpoint: /products
+Sending Data: {
+  "store_id": 5,
+  "product_category_id": 5,
+  "product_name": "Cola",
+  "product_description": "Tasty cola",
+  "product_price": 5,
+  "product_stock": 100,
+  "product_status": "active"
+}
+Success! Response: {
+  "message": "Product created successfully",
+  "product": {
+    "is_featured": false,
+    "product_id": 5,
+    "store_id": 5,
+    "product_category_id": 5,
+    "product_name": "Cola",
+    "product_description": "Tasty cola",
+    "product_price": 5,
+    "product_stock": 100,
+    "product_status": "active",
+    "updated_at": "2025-12-07T21:48:31.436Z",
+    "created_at": "2025-12-07T21:48:31.436Z"
+  }
+}
+Captured ID [product_id]: 5
+
+---------------------------------------------------
+Testing Controller: ProductOptionController
+Arabic Name: التحكم بخيارات المنتجات (Product Options)
+Endpoint: /product-options
+Sending Data: {
+  "product_id": 5,
+  "option_name": "Size",
+  "option_type": "single",
+  "option_values": {
+    "Small": 0,
+    "Large": 2
+  }
+}
+Success! Response: {
+  "message": "ProductOption created successfully",
+  "productOption": {
+    "product_option_id": 5,
+    "product_id": 5,
+    "option_name": "Size",
+    "option_type": "single",
+    "option_values": {
+      "Small": 0,
+      "Large": 2
+    },
+    "updated_at": "2025-12-07T21:48:31.451Z",
+    "created_at": "2025-12-07T21:48:31.451Z"
+  }
+}
+Captured ID [product_option_id]: 5
+
+---------------------------------------------------
+Testing Controller: CouponController
+Arabic Name: التحكم بقسائم الخصم (Coupons)
+Endpoint: /coupons
+Sending Data: {
+  "store_id": 5,
+  "coupon_code": "SAVE1765144111463",
+  "coupon_type": "percentage",
+  "coupon_value": 10,
+  "valid_from": "2025-12-07T21:48:31.463Z",
+  "valid_to": "2025-12-08T21:48:31.463Z"
+}
+Success! Response: {
+  "message": "Coupon created successfully",
+  "coupon": {
+    "min_order": 0,
+    "usage_per_user": 1,
+    "used_count": 0,
+    "coupon_status": true,
+    "created_at": "2025-12-07T21:48:31.473Z",
+    "updated_at": "2025-12-07T21:48:31.473Z",
+    "coupon_id": 5,
+    "store_id": 5,
+    "coupon_code": "SAVE1765144111463",
+    "coupon_type": "percentage",
+    "coupon_value": 10,
+    "valid_from": "2025-12-07T21:48:31.463Z",
+    "valid_to": "2025-12-08T21:48:31.463Z"
+  }
+}
+Captured ID [coupon_id]: 5
+
+---------------------------------------------------
+Testing Controller: BannerController
+Arabic Name: التحكم بالإعلانات/البنرات (Banners)
+Endpoint: /banners
+Sending Data: {
+  "banner_title": "Promo Banner",
+  "banner_image": "banner.jpg",
+  "link_type": "url",
+  "link_value": "http://example.com",
+  "banner_position": "home_slider",
+  "city_id": 5
+}
+Success! Response: {
+  "message": "Banner created successfully",
+  "banner": {
+    "banner_status": true,
+    "sort_order": 0,
+    "clicks_count": 0,
+    "views_count": 0,
+    "created_at": "2025-12-07T21:48:31.494Z",
+    "updated_at": "2025-12-07T21:48:31.494Z",
+    "banner_id": 5,
+    "banner_title": "Promo Banner",
+    "banner_image": "banner.jpg",
+    "link_type": "url",
+    "link_value": "http://example.com",
+    "banner_position": "home_slider",
+    "city_id": 5
+  }
+}
+Captured ID [banner_id]: 5
+
+---------------------------------------------------
+Testing Controller: NotificationController
+Arabic Name: التحكم بالإشعارات (Notifications)
+Endpoint: /notifications
+Sending Data: {
+  "user_id": 9,
+  "notification_title": "Welcome",
+  "notification_body": "Thanks for joining!",
+  "notification_type": "system"
+}
+Success! Response: {
+  "message": "Notification created successfully",
+  "notification": {
+    "is_read": false,
+    "created_at": "2025-12-07T21:48:31.512Z",
+    "notification_id": 5,
+    "user_id": 9,
+    "notification_title": "Welcome",
+    "notification_body": "Thanks for joining!",
+    "notification_type": "system"
+  }
+}
+Captured ID [notification_id]: 5
+
+---------------------------------------------------
+Testing Controller: OrderController
+Arabic Name: التحكم بالطلبات (Orders)
+Endpoint: /orders
+Sending Data: {
+  "user_id": 9,
+  "store_id": 5,
+  "address_id": 4,
+  "order_number": "ORD-1765144111521",
+  "subtotal": 50,
+  "delivery_fee": 10,
+  "delivery_distance": 5.5,
+  "total": 60,
+  "payment_method": "cash",
+  "delivery_address": {
+    "street": "Main St",
+    "city": "Riyadh"
+  }
+}
+Success! Response: {
+  "message": "Order created successfully",
+  "order": {
+    "order_status": "pending",
+    "discount": 0,
+    "payment_status": "pending",
+    "order_id": 4,
+    "user_id": 9,
+    "store_id": 5,
+    "address_id": 4,
+    "order_number": "ORD-1765144111521",
+    "subtotal": 50,
+    "delivery_fee": 10,
+    "delivery_distance": 5.5,
+    "total": 60,
+    "payment_method": "cash",
+    "delivery_address": {
+      "street": "Main St",
+      "city": "Riyadh"
+    },
+    "created_at": "2025-12-07T21:48:31.529Z"
+  }
+}
+Captured ID [order_id]: 4
+
+---------------------------------------------------
+Testing Controller: OrderItemController
+Arabic Name: التحكم بعناصر الطلب (Order Items)
+Endpoint: /order-items
+Sending Data: {
+  "order_id": 4,
+  "product_id": 5,
+  "product_name": "Cola",
+  "quantity": 2,
+  "unit_price": 5,
+  "total_price": 10
+}
+Success! Response: {
+  "message": "OrderItem created successfully",
+  "orderItem": {
+    "options_price": 0,
+    "order_item_id": 4,
+    "order_id": 4,
+    "product_id": 5,
+    "product_name": "Cola",
+    "quantity": 2,
+    "unit_price": 5,
+    "total_price": 10,
+    "created_at": "2025-12-07T21:48:31.547Z"
+  }
+}
+Captured ID [order_item_id]: 4
+
+---------------------------------------------------
+Testing Controller: ReviewController
+Arabic Name: التحكم بالتقييمات (Reviews)
+Endpoint: /reviews
+Sending Data: {
+  "user_id": 9,
+  "order_id": 4,
+  "review_type": "store",
+  "target_id": 5,
+  "rating": 5,
+  "review_comment": "Excellent service!"
+}
+Success! Response: {
+  "message": "Review created successfully",
+  "review": {
+    "is_visible": true,
+    "created_at": "2025-12-07T21:48:31.565Z",
+    "review_id": 4,
+    "user_id": 9,
+    "order_id": 4,
+    "review_type": "store",
+    "target_id": 5,
+    "rating": 5,
+    "review_comment": "Excellent service!"
+  }
+}
+Captured ID [review_id]: 4
+
+---------------------------------------------------
+Testing Controller: TransactionController
+Arabic Name: التحكم بالعمليات المالية (Transactions)
+Endpoint: /transactions
+Sending Data: {
+  "user_id": 9,
+  "transaction_type": "debit",
+  "amount": 60,
+  "balance_after": 1000,
+  "description": "Payment for Order #4",
+  "reference_type": "order",
+  "reference_id": 4
+}
+Success! Response: {
+  "message": "Transaction created successfully",
+  "transaction": {
+    "transaction_id": 3,
+    "user_id": 9,
+    "transaction_type": "debit",
+    "amount": 60,
+    "balance_after": 1000,
+    "description": "Payment for Order #4",
+    "reference_type": "order",
+    "reference_id": 4,
+    "created_at": "2025-12-07T21:48:31.585Z"
+  }
+}
+Captured ID [transaction_id]: 3
+
+---------------------------------------------------
+Testing Controller: CouponUsageController
+Arabic Name: التحكم باستخدام القسائم (Coupon Usage)
+Endpoint: /coupon-usages
+Sending Data: {
+  "coupon_id": 5,
+  "user_id": 9,
+  "order_id": 4,
+  "discount_amount": 5
+}
+Success! Response: {
+  "message": "CouponUsage created successfully",
+  "couponUsage": {
+    "created_at": "2025-12-07T21:48:31.601Z",
+    "coupon_usage_id": 2,
+    "coupon_id": 5,
+    "user_id": 9,
+    "order_id": 4,
+    "discount_amount": 5
+  }
+}
+Captured ID [coupon_usage_id]: 2
+
+---------------------------------------------------
+Testing Controller: OrderStatusHistoryController
+Arabic Name: التحكم بسجل حالات الطلب (Order Status History)
+Endpoint: /order-status-histories
+Sending Data: {
+  "order_id": 4,
+  "status": "pending",
+  "status_notes": "Order placed initially",
+  "created_by": 9
+}
+Success! Response: {
+  "message": "OrderStatusHistory created successfully",
+  "orderStatusHistory": {
+    "order_status_history_id": 2,
+    "order_id": 4,
+    "status": "pending",
+    "status_notes": "Order placed initially",
+    "created_by": 9,
+    "created_at": "2025-12-07T21:48:31.616Z"
+  }
+}
+Captured ID [order_status_history_id]: 2
+
+Test Run Completed.

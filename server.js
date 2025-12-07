@@ -33,8 +33,9 @@ app.use('/api', require('./routes/OrderRoute'));
 app.use('/api', require('./routes/OrderItemRoute'))
 app.use('/api', require('./routes/ReviewRoute'));
 app.use('/api', require('./routes/BannerRoute'));
-app.use('/api', require('./routes/CityRoute'))
-app.use('/api', require('./routes/CouponRoute'))
+app.use('/api', require('./routes/CityRoute'));
+app.use('/api', require('./routes/CouponRoute'));
+app.use('/api', require('./routes/CouponUsageRoute'));
 app.use('/api', require('./routes/NotificationRoute'))
 app.use('/api', require('./routes/OrderStatusHistoryRoute'))
 app.use('/api', require('./routes/ProductCategoryRoute'))
@@ -42,6 +43,7 @@ app.use('/api', require('./routes/ProductOptionRoute'))
 app.use('/api', require('./routes/StoreRoute'))
 app.use('/api', require('./routes/StoreCategoryRoute'))
 app.use('/api', require('./routes/TransactionRoute'))
+app.use('/api', require('./routes/AddressRoute'))
 
 
 
