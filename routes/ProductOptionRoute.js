@@ -3,7 +3,11 @@ const router = express.Router();
 const productOptionController = require('../controllers/ProductOptionController');
 
 router.post('/product-options', productOptionController.createProductOption);
+// router.post('/product-options', productOptionController.createProductOption); // Alias
+
 router.get('/product-options', productOptionController.getProductOptions);
+// router.get('/product-options', productOptionController.getProductOptions); // Alias
+
 router.get('/product-options/:id', productOptionController.getProductOptionById);
 router.put('/product-options/:id', productOptionController.updateProductOption);
 router.delete('/product-options/:id', productOptionController.deleteProductOption);

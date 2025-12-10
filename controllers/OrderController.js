@@ -6,6 +6,18 @@ const createOrder = async (req, res) => {
         res.status(201).json({ message: "Order created successfully", order });
     } catch (error) {
         console.error("Create Order Error:", error);
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: "Validation Error",
+                errors: error.errors.map(e => e.message)
+            });
+        }
+        if (error.name === 'SequelizeForeignKeyConstraintError') {
+            return res.status(400).json({
+                message: "Foreign Key Constraint Error",
+                error: `Invalid reference: ${error.fields ? error.fields.join(', ') : 'Unknown field'}`
+            });
+        }
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
@@ -38,6 +50,19 @@ const updateOrder = async (req, res) => {
         const updatedOrder = await order.update(req.body);
         res.status(200).json(updatedOrder);
     } catch (error) {
+        console.error("Update Order Error:", error);
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: "Validation Error",
+                errors: error.errors.map(e => e.message)
+            });
+        }
+        if (error.name === 'SequelizeForeignKeyConstraintError') {
+            return res.status(400).json({
+                message: "Foreign Key Constraint Error",
+                error: `Invalid reference: ${error.fields ? error.fields.join(', ') : 'Unknown field'}`
+            });
+        }
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };

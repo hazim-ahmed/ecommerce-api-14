@@ -64,6 +64,12 @@ const createUser = async (req, res) => {
 
     } catch (error) {
         console.error("Create User Error:", error);
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: "Validation Error",
+                errors: error.errors.map(e => e.message)
+            });
+        }
         return res.status(500).json({
             message: "Server error",
             error: error.message
@@ -131,6 +137,22 @@ const updateUser = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        // Check for duplicate phone number if being updated
+        if (req.body.phone && req.body.phone !== user.phone) {
+            const existingPhone = await User.findOne({ where: { phone: req.body.phone } });
+            if (existingPhone && existingPhone.user_id != id) {
+                return res.status(400).json({ message: "Phone number already exists" });
+            }
+        }
+
+        // Check for duplicate email if being updated
+        if (req.body.email && req.body.email !== user.email) {
+            const existingEmail = await User.findOne({ where: { email: req.body.email } });
+            if (existingEmail && existingEmail.user_id != id) {
+                return res.status(400).json({ message: "Email already exists" });
+            }
+        }
+
         const updates = { ...req.body };
 
         // If password is being updated, hash it first
@@ -143,6 +165,12 @@ const updateUser = async (req, res) => {
         return res.status(200).json(updatedUser);
     } catch (error) {
         console.error("Update User Error:", error);
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: "Validation Error",
+                errors: error.errors.map(e => e.message)
+            });
+        }
         return res.status(500).json({
             message: "Server error",
             error: error.message
