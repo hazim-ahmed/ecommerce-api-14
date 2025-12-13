@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const transactionController = require('../controllers/TransactionController');
 
-router.post('/transactions', transactionController.createTransaction);
+const { createTransactionValidation } = require('../validations/transaction.validation');
+const validateRequest = require('../middleware/validateRequest');
+
+router.post('/transactions', createTransactionValidation, validateRequest, transactionController.createTransaction);
 router.get('/transactions', transactionController.getTransactions);
 router.get('/transactions/:id', transactionController.getTransactionById);
 router.put('/transactions/:id', transactionController.updateTransaction);

@@ -2,17 +2,6 @@ const { ProductOption, Product } = require('../models');
 
 const createProductOption = async (req, res) => {
     try {
-        const { product_id } = req.body;
-
-        if (!product_id) {
-            return res.status(400).json({ message: "product_id is required" });
-        }
-
-        const product = await Product.findByPk(product_id);
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-
         const productOption = await ProductOption.create(req.body);
         res.status(201).json({ message: "ProductOption created successfully", productOption });
     } catch (error) {

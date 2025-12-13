@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/UserController');
+const { createUserValidation, updateUserValidation } = require('../validations/user.validation');
+const validateRequest = require('../middleware/validateRequest');
 
 /**
  * @route POST /api/users
  * @desc Create a new user
  * @access Public
  */
-router.post('/users', userController.createUser);
+router.post('/users', createUserValidation, validateRequest, userController.createUser);
 
 /**
  * @route GET /api/users
@@ -28,7 +30,7 @@ router.get('/users/:id', userController.getUserById);
  * @desc Update user details
  * @access Public
  */
-router.put('/users/:id', userController.updateUser);
+router.put('/users/:id', updateUserValidation, validateRequest, userController.updateUser);
 
 /**
  * @route DELETE /api/users/:id
