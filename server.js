@@ -44,6 +44,7 @@ app.use('/api', require('./routes/StoreRoute'))
 app.use('/api', require('./routes/StoreCategoryRoute'))
 app.use('/api', require('./routes/TransactionRoute'))
 app.use('/api', require('./routes/AddressRoute'))
+app.use('/api', require('./routes/AuthRoute'));
 
 
 
