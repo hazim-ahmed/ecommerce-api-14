@@ -34,7 +34,8 @@ const updateProductOption = async (req, res) => {
     try {
         const { id } = req.params;
         const productOption = await ProductOption.findByPk(id);
-        if (!productOption) return res.status(404).json({ message: "ProductOption not found" });
+      
+         return res.status(404).json({ message: "ProductOption not found" });
         const updatedProductOption = await productOption.update(req.body);
         res.status(200).json(updatedProductOption);
     } catch (error) {
