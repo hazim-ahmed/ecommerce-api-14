@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const AuthTokenService = require('../services/AuthTokenService');
 const { User } = require('../models');
 
 const authenticate = async (req, res, next) => {
@@ -15,14 +15,11 @@ const authenticate = async (req, res, next) => {
             return res.status(401).json({ message: 'Unauthorized: Malformed token' });
         }
 
-        // Verify token
-        const secret = process.env.JWT_SECRET || 'your_super_secret_key';
-        const decoded = jwt.verify(token, secret);
+        // Verify token against database (checks signature, existence, activity, and expiration)
+        const user = await AuthTokenService.validateToken(token);
 
-        // Check if user exists
-        const user = await User.findByPk(decoded.user_id);
         if (!user) {
-            return res.status(401).json({ message: 'Unauthorized: User not found' });
+            return res.status(401).json({ message: 'Unauthorized: Invalid or expired token' });
         }
 
         if (user.user_status === 'blocked' || user.user_status === 'inactive') {
@@ -34,12 +31,6 @@ const authenticate = async (req, res, next) => {
         next();
 
     } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: 'Unauthorized: Token expired' });
-        }
-        if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ message: 'Unauthorized: Invalid token' });
-        }
         console.error("Auth Middleware Error:", error);
         return res.status(500).json({ message: 'Server error during authentication' });
     }

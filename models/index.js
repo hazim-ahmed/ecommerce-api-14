@@ -10,6 +10,7 @@ const { Sequelize } = require('sequelize');
 const User = require('./User');
 const Address = require('./Address');
 const Notification = require('./Notification');
+const ApiKey = require('./apiKey'); // Import ApiKey model
 
 // ==============================================================
 // ======================= LOCATIONS ============================
@@ -69,6 +70,10 @@ Notification.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Transaction, { foreignKey: 'user_id', as: 'transactions' });
 Transaction.belongsTo(User, { foreignKey: 'user_id' });
 
+// API Keys
+User.hasMany(ApiKey, { foreignKey: 'user_id', as: 'apiKeys' });
+ApiKey.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
 // المستخدم كعميل
 User.hasMany(Order, { foreignKey: 'user_id', as: 'customerOrders' });
 Order.belongsTo(User, { foreignKey: 'user_id', as: 'customer' });
@@ -82,11 +87,11 @@ User.hasMany(Review, { foreignKey: 'user_id', as: 'writtenReviews' });
 Review.belongsTo(User, { foreignKey: 'user_id', as: 'reviewer' });
 
 // المستخدم (موصل) يحصل على تقييمات
-User.hasMany(Review, { 
-    foreignKey: 'target_id', 
+User.hasMany(Review, {
+    foreignKey: 'target_id',
     constraints: false,
     scope: { review_type: 'driver' },
-    as: 'driverReviews' 
+    as: 'driverReviews'
 });
 
 User.hasMany(CouponUsage, { foreignKey: 'user_id', as: 'couponUsage' });
@@ -129,14 +134,14 @@ Store.hasMany(Order, { foreignKey: 'store_id', as: 'orders' });
 Order.belongsTo(Store, { foreignKey: 'store_id' });
 
 // المتجر يحصل على تقييمات
-Store.hasMany(Review, { 
-    foreignKey: 'target_id', 
+Store.hasMany(Review, {
+    foreignKey: 'target_id',
     constraints: false,
     scope: { review_type: 'store' },
-    as: 'reviews' 
+    as: 'reviews'
 });
-Review.belongsTo(Store, { 
-    foreignKey: 'target_id', 
+Review.belongsTo(Store, {
+    foreignKey: 'target_id',
     constraints: false,
     as: 'store'
 });
@@ -218,7 +223,8 @@ const db = {
     Coupon,
     CouponUsage,
 
-    Review
+    Review,
+    ApiKey
 };
 
 module.exports = db;

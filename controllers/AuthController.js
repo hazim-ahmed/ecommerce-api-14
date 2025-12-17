@@ -1,6 +1,6 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const { generateToken } = require('../utils/jwt');
+const AuthTokenService = require('../services/AuthTokenService'); // Use the new service
 const { Op } = require('sequelize');
 
 const signup = async (req, res) => {
@@ -19,7 +19,8 @@ const signup = async (req, res) => {
             user_status: 'active'
         });
 
-        const token = generateToken(newUser);
+        // Use AuthService to generate and store token
+        const token = await AuthTokenService.generateAndSaveToken(newUser);
 
         const userObj = newUser.toJSON();
         delete userObj.password;
@@ -35,8 +36,6 @@ const signup = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
-
-// Removed debugLog for production
 
 const login = async (req, res) => {
     try {
@@ -67,7 +66,8 @@ const login = async (req, res) => {
             return res.status(403).json({ message: 'Account is not active' });
         }
 
-        const token = generateToken(user);
+        // Use AuthService to generate and store token
+        const token = await AuthTokenService.generateAndSaveToken(user);
 
         const userObj = user.toJSON();
         delete userObj.password;
@@ -84,8 +84,23 @@ const login = async (req, res) => {
     }
 };
 
+const logout = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const token = authHeader.split(' ')[1];
+            await AuthTokenService.revokeToken(token);
+        }
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error("Logout Error:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
 const getMe = async (req, res) => {
     try {
+        // req.user is attached by authMiddleware
         const user = await User.findByPk(req.user.user_id);
         if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -101,5 +116,6 @@ const getMe = async (req, res) => {
 module.exports = {
     signup,
     login,
+    logout,
     getMe
 };
