@@ -52,6 +52,7 @@ Base URL: http://<server_ip>:3000/api
 - `POST /auth/signup`      : Register a new user
 - `POST /auth/login`       : Login existing user
 - `GET  /auth/me`          : Get current user profile (Requires Token)
+- `POST /auth/logout`      : Logout user (Revoke token)
 
 ### Users
 - `POST   /users`          : Create user (Admin/System)
@@ -116,7 +117,7 @@ Base URL: http://<server_ip>:3000/api
 - `PUT    /order-status-histories/:id` : Update log
 - `DELETE /order-status-histories/:id` : Delete log
 
-### Baners (Ads)
+### Banners (Ads)
 - `POST   /banners`        : Create banner
 - `GET    /banners`        : List banners
 - `GET    /banners/:id`    : Get banner details
