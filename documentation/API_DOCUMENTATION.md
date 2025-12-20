@@ -76,10 +76,10 @@ Base URL: http://<server_ip>:3000/api
 - `DELETE /store-categories/:id`  : Delete category
 
 ### Products
-- `POST   /products`       : Create product
+- `POST   /products`       : Create product (Supports `multipart/form-data` for `product_images`)
 - `GET    /products`       : List products
 - `GET    /products/:id`   : Get product details
-- `PUT    /products/:id`   : Update product
+- `PUT    /products/:id`   : Update product (Supports `multipart/form-data` for `product_images`)
 - `DELETE /products/:id`   : Delete product
 
 ### Product Categories
@@ -173,5 +173,39 @@ Base URL: http://<server_ip>:3000/api
 - `PUT    /reviews/:id`    : Update review
 - `DELETE /reviews/:id`    : Delete review
 
------------------------------------------
-Generated: 2025-12-13
+=========================================
+
+3. Image Uploads & Static Files
+---------------------------------------------
+
+### Uploading Images
+
+The API supports image uploads for Products using `multipart/form-data`.
+
+**Endpoint:** `POST /api/products` or `PUT /api/products/:id`
+
+**Body Parameters (form-data):**
+
+- `product_images`: File (Select one or multiple images, max 5)
+- Other fields: `product_name`, `product_price`, etc. (as Text)
+
+**Response:**
+
+The API will return the product object with a `product_images` array containing the public URLs of the uploaded images.
+
+```json
+"product_images": [
+    "http://<server_ip>:3000/uploads/products/product-123456789.jpg",
+    "http://<server_ip>:3000/uploads/products/product-987654321.png"
+]
+```
+
+### Accessing Images (Download)
+
+Uploaded images are served statically. You can access/download them directly via their URL.
+
+**Base Path:** `/uploads`
+**Example URL:** `http://<server_ip>:3000/uploads/products/image_name.jpg`
+
+---------------------------------------------
+Generated: 2025-12-21

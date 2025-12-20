@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Upload System Test</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        background: #f4f4f9;
+        color: #333;
+      }
+      .container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2c3e50;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="number"],
+      textarea {
+        width: 100%;
+        pading: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        height: 35px;
+        box-sizing: border-box;
+      }
+      button {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      button:hover {
+        background: #2980b9;
+      }
+      #result {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        display: none;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+      .gallery {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+      .gallery img {
+        max-width: 200px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+      }
+      .preview-box {
+        margin-top: 20px;
+      }
+      .preview-box h3 {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📸 Upload System Tester</h1>
+      <p>
+        Use this form to test the upload middleware and image serving
+        (Download).
+      </p>
+
+      <form id="uploadForm">
+        <div style="display: flex; gap: 20px">
+          <div class="form-group" style="flex: 1">
+            <label>Store ID:</label>
+            <input type="number" name="store_id" value="1" required />
+          </div>
+          <div class="form-group" style="flex: 1">
+            <label>Category ID:</label>
+            <input
+              type="number"
+              name="product_category_id"
+              value="1"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Name:</label>
+          <input
+            type="text"
+            name="product_name"
+            value="Test Product with Images"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Price:</label>
+          <input type="number" name="product_price" value="99.99" required />
+        </div>
+
+        <div class="form-group">
+          <label>Product Images (Select up to 5):</label>
+          <input
+            type="file"
+            name="product_images"
+            multiple
+            accept="image/*"
+            required
+          />
+        </div>
+
+        <button type="submit" id="submitBtn">🚀 Upload & Test</button>
+      </form>
+
+      <div id="result"></div>
+
+      <div id="previewArea" class="preview-box" style="display: none">
+        <h3>✅ Download Test (Served Images):</h3>
+        <p>
+          If you see the images below, the <code>/uploads</code> static route is
+          working correctly.
+        </p>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("submitBtn");
+          const resultDiv = document.getElementById("result");
+          const gallery = document.getElementById("gallery");
+          const previewArea = document.getElementById("previewArea");
+
+          btn.disabled = true;
+          btn.textContent = "Uploading...";
+          resultDiv.style.display = "block";
+          resultDiv.textContent = "Sending request...";
+          resultDiv.className = "";
+          gallery.innerHTML = "";
+          previewArea.style.display = "none";
+
+          const formData = new FormData(e.target);
+
+          try {
+            // Adjust URL if your server runs on a different port
+            const response = await fetch("http://localhost:3000/api/products", {
+              method: "POST",
+              body: formData,
+            });
+
+            const data = await response.json();
+
+            resultDiv.textContent = JSON.stringify(data, null, 2);
+
+            if (response.ok) {
+              resultDiv.className = "success";
+
+              // Visualize the "Download" part
+              if (data.product && data.product.product_images) {
+                previewArea.style.display = "block";
+                data.product.product_images.forEach((url) => {
+                  const img = document.createElement("img");
+                  img.src = url;
+                  img.alt = "Uploaded Image";
+                  // Add a click listener to open in new tab (Download test)
+                  img.onclick = () => window.open(url, "_blank");
+                  img.title = "Click to open full size";
+                  gallery.appendChild(img);
+                });
+              }
+            } else {
+              resultDiv.className = "error";
+            }
+          } catch (error) {
+            resultDiv.textContent =
+              "Error: " +
+              error.message +
+              "\n\nMake sure the server is checking port 3000 and CORS is enabled.";
+            resultDiv.className = "error";
+          } finally {
+            btn.disabled = false;
+            btn.textContent = "🚀 Upload & Test";
+          }
+        });
+    </script>
+  </body>
+</html>
