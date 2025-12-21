@@ -31,11 +31,16 @@ const seedProducts = async (productsPerStore = 10) => {
                 product_name: faker.commerce.productName(),
                 product_description: faker.commerce.productDescription(),
                 product_price: price,
-                discount_price: Math.random() > 0.7 ? price * 0.8 : null, // 30% chance of discount
+                discount_price: Math.random() > 0.7 ? price * 0.8 : null,
                 product_stock: faker.number.int({ min: 0, max: 100 }),
                 product_status: 'active',
                 is_featured: Math.random() > 0.8,
-                product_images: [faker.image.url(), faker.image.url()]
+                // Default Placeholders
+                product_images: [
+                    'https://placehold.co/500x500/e6e6e6/333333?text=Product+Image',
+                    'https://placehold.co/500x500/e6e6e6/333333?text=Gallery+1',
+                    'https://placehold.co/500x500/e6e6e6/333333?text=Gallery+2'
+                ]
             });
         }
     }

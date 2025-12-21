@@ -8,11 +8,11 @@ const seedBanners = async () => {
     const cities = await City.findAll();
     const banners = [];
 
-    // General Home Sliders (No specific city)
+    // General Home Sliders
     for (let i = 0; i < 3; i++) {
         banners.push({
             banner_title: faker.lorem.words(3),
-            banner_image: faker.image.url({ width: 800, height: 400 }),
+            banner_image: 'https://placehold.co/1200x400/e6e6e6/333333?text=Home+Banner',
             link_type: 'none',
             banner_position: 'home_slider',
             banner_status: true,
@@ -26,9 +26,9 @@ const seedBanners = async () => {
     for (const city of cities) {
         banners.push({
             banner_title: `Welcome to ${city.city_name_en}`,
-            banner_image: faker.image.url({ width: 800, height: 200 }),
+            banner_image: 'https://placehold.co/800x200/e6e6e6/333333?text=City+Banner',
             link_type: 'category',
-            link_value: '1', // Mock Category ID
+            link_value: '1',
             banner_position: 'home_banner',
             city_id: city.city_id,
             banner_status: true,

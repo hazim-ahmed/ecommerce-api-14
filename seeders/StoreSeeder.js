@@ -7,7 +7,6 @@ const StoreCategory = require('../models/StoreCategory');
 const seedStores = async (count = 10) => {
     console.log('🌱 Seeding Stores...');
 
-    // Fetch necessary FKs
     const vendors = await User.findAll({ where: { user_type: 'vendor' } });
     const cities = await City.findAll();
     const categories = await StoreCategory.findAll();
@@ -20,7 +19,7 @@ const seedStores = async (count = 10) => {
     const stores = [];
 
     for (let i = 0; i < count; i++) {
-        const vendor = vendors[i % vendors.length]; // Distribute amongst vendors
+        const vendor = vendors[i % vendors.length];
         const city = cities[Math.floor(Math.random() * cities.length)];
         const category = categories[Math.floor(Math.random() * categories.length)];
 
@@ -29,9 +28,10 @@ const seedStores = async (count = 10) => {
             city_id: city.city_id,
             store_category_id: category.store_category_id,
             store_name: faker.company.name(),
-            store_description: faker.lorem.sentence(),
-            store_logo: faker.image.avatar(),
-            store_cover: faker.image.url(),
+            store_description: faker.lorem.paragraph(),
+            // Default Placeholders
+            store_logo: 'https://placehold.co/200x200/cccccc/ffffff?text=Store+Logo',
+            store_cover: 'https://placehold.co/800x300/cccccc/ffffff?text=Store+Cover',
             store_phone: faker.phone.number('01#########'),
             store_status: 'approved',
             is_open: true,
