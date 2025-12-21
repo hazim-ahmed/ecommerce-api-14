@@ -5,8 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "updb":"node sync-db.js",
-    "dev": "node --watch server.js"
+    "updb": "node sync-db.js",
+    "dev": "node --watch server.js",
+    "seed": "node seeders/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -25,5 +26,8 @@
     "sequelize": "^6.37.7",
     "winston": "^3.18.3",
     "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.1.0"
   }
 }
