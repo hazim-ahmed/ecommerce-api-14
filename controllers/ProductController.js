@@ -1,4 +1,4 @@
-const { Product } = require('../models');
+const { Product, Store } = require('../models'); // Import Store model
 
 const createProduct = async (req, res) => {
     try {
@@ -38,14 +38,32 @@ const createProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const { store_id } = req.query;
+        const { store_id, city_id } = req.query;
         let whereClause = {};
+        let includeClause = [];
 
         if (store_id) {
             whereClause.store_id = store_id;
         }
 
-        const products = await Product.findAll({ where: whereClause });
+        // Always include Store details (Name, Logo, etc.) for display
+        let storeInclude = {
+            model: Store,
+            attributes: ['store_id', 'store_name', 'store_logo', 'city_id'],
+            required: true
+        };
+
+        // If City ID provided, filter Store by that city
+        if (city_id) {
+            storeInclude.where = { city_id: city_id };
+        }
+
+        includeClause.push(storeInclude);
+
+        const products = await Product.findAll({
+            where: whereClause,
+            include: includeClause
+        });
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });

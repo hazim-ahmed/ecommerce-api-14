@@ -12,11 +12,15 @@ const createStore = async (req, res) => {
 
 const getStores = async (req, res) => {
     try {
-        const { category_id } = req.query;
+        const { category_id, city_id } = req.query;
         let whereClause = {};
 
         if (category_id) {
             whereClause.store_category_id = category_id;
+        }
+
+        if (city_id) {
+            whereClause.city_id = city_id;
         }
 
         const stores = await Store.findAll({ where: whereClause });
