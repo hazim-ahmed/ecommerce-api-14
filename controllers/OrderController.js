@@ -24,7 +24,14 @@ const createOrder = async (req, res) => {
 
 const getOrders = async (req, res) => {
     try {
-        const orders = await Order.findAll();
+        let whereClause = {};
+
+        // If user is authenticated and is NOT admin, show only their orders
+        if (req.user && req.user.user_type !== 'admin') {
+            whereClause.user_id = req.user.user_id;
+        }
+
+        const orders = await Order.findAll({ where: whereClause });
         res.status(200).json(orders);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });

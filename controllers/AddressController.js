@@ -12,7 +12,14 @@ const createAddress = async (req, res) => {
 
 const getAddresses = async (req, res) => {
     try {
-        const addresses = await Address.findAll();
+        let whereClause = {};
+
+        // If user is authenticated and is NOT admin, show only their addresses
+        if (req.user && req.user.user_type !== 'admin') {
+            whereClause.user_id = req.user.user_id;
+        }
+
+        const addresses = await Address.findAll({ where: whereClause });
         res.status(200).json(addresses);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });

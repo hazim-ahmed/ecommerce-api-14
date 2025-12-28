@@ -38,7 +38,14 @@ const createProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const products = await Product.findAll();
+        const { store_id } = req.query;
+        let whereClause = {};
+
+        if (store_id) {
+            whereClause.store_id = store_id;
+        }
+
+        const products = await Product.findAll({ where: whereClause });
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });

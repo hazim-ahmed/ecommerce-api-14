@@ -5,10 +5,12 @@ const addressController = require('../controllers/AddressController');
 const { createAddressValidation, updateAddressValidation } = require('../validations/address.validation');
 const validateRequest = require('../middleware/validateRequest');
 
-router.post('/addresses', createAddressValidation, validateRequest, addressController.createAddress);
-router.get('/addresses', addressController.getAddresses);
-router.get('/addresses/:id', addressController.getAddressById);
-router.put('/addresses/:id', updateAddressValidation, validateRequest, addressController.updateAddress);
-router.delete('/addresses/:id', addressController.deleteAddress);
+const { authenticate } = require('../middleware/authMiddleware');
+
+router.post('/addresses', authenticate, createAddressValidation, validateRequest, addressController.createAddress);
+router.get('/addresses', authenticate, addressController.getAddresses);
+router.get('/addresses/:id', authenticate, addressController.getAddressById);
+router.put('/addresses/:id', authenticate, updateAddressValidation, validateRequest, addressController.updateAddress);
+router.delete('/addresses/:id', authenticate, addressController.deleteAddress);
 
 module.exports = router;
