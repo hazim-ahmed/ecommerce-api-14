@@ -86,16 +86,43 @@ app.get('/', (req, res) => {
 
 // --- Error Handler ---
 app.use((err, req, res, next) => {
-  logger.error(err.stack || err.message);
-  res.status(500).json({ success: false, message: 'Internal Server Error' });
+  // Log detailed error information
+  logger.error('Error occurred:', {
+    message: err.message,
+    stack: err.stack,
+    url: req.url,
+    method: req.method,
+    body: req.body
+  });
+
+  // Don't expose internal error details in production
+  const message = process.env.NODE_ENV === 'production'
+    ? 'Internal Server Error'
+    : err.message;
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: message
+  });
 });
 
 // --- تشغيل السيرفر بعد التحقق من قاعدة البيانات ---
 const startServer = async () => {
-  await testConnection(); // <-- اختبار الاتصال
-  app.listen(PORT, () => {
-    logger.info(`Server running on port ${PORT}`);
-  });
+  try {
+    // Test database connection first
+    await testConnection();
+
+    // Only start server if DB connection succeeds
+    app.listen(PORT, () => {
+      logger.info(`✅ Server running on port ${PORT}`);
+      logger.info(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+      logger.info(`   Ready to accept requests`);
+    });
+  } catch (error) {
+    logger.error('❌ Failed to start server:', error.message);
+    logger.error('   Server will not start without database connection');
+    process.exit(1); // Exit with error code
+  }
 };
 
 startServer();
