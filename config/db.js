@@ -111,22 +111,29 @@ const testConnection = async () => {
     } catch (error) {
         console.error('❌ [DB-ERROR] Unable to connect to the database');
 
+        // Debug: Log full error object if message is empty
+        if (!error.message) {
+            console.error('   [DEBUG] Error object:', JSON.stringify(error, null, 2));
+        }
+
         // Provide specific error guidance
         if (error.name === 'SequelizeConnectionError') {
             console.error('   Connection Error Details:');
-            console.error(`   - ${error.message}`);
+            console.error(`   - ${error.message || 'No error message provided'}`);
+            console.error(`   - Host: ${sequelize.config.host}`);
+            console.error(`   - Port: ${sequelize.config.port}`);
 
-            if (error.message.includes('ETIMEDOUT')) {
+            if (error.message && error.message.includes('ETIMEDOUT')) {
                 console.error('\n   Possible causes:');
                 console.error('   1. Database host is unreachable');
                 console.error('   2. Firewall blocking connection');
                 console.error('   3. Incorrect DB_HOST or DB_PORT');
-            } else if (error.message.includes('Access denied')) {
+            } else if (error.message && error.message.includes('Access denied')) {
                 console.error('\n   Possible causes:');
                 console.error('   1. Incorrect DB_USER or DB_PASS');
                 console.error('   2. User does not have access to DB_NAME');
                 console.error('   3. Host restrictions on database user');
-            } else if (error.message.includes('Unknown database')) {
+            } else if (error.message && error.message.includes('Unknown database')) {
                 console.error('\n   Possible causes:');
                 console.error('   1. Database name does not exist');
                 console.error('   2. Check DB_NAME environment variable');
@@ -134,7 +141,8 @@ const testConnection = async () => {
         } else if (error.name === 'SequelizeAccessDeniedError') {
             console.error('   Access Denied - Check credentials');
         } else {
-            console.error('   Error:', error.message);
+            console.error('   Error Name:', error.name);
+            console.error('   Error Message:', error.message);
             console.error('   Stack:', error.stack);
         }
 
